@@ -6,5 +6,5 @@ const container = document.getElementById('bookmarks');
 ReactDOM.render(
   <Bookmarks feed={container.getAttribute('data-feed')}
              limit={container.getAttribute('data-limit')}
-             loadingGif={container.getAttribute('data-loading-gif')} />,
+             loadingMessage={container.getAttribute('data-loading-message')} />,
   container);

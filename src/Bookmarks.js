@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import fetch from 'node-fetch';
-import timeago from 'timeago.js';
 
 export default class Bookmarks extends Component {
   state = {
@@ -8,9 +7,23 @@ export default class Bookmarks extends Component {
   };
 
   componentDidMount() {
+    try {
+      const cache = JSON.parse(localStorage.getItem('bookmarks'));
+      if (cache.expiry > new Date().getTime() && cache.bookmarks.length > 0) {
+        this.setState({ bookmarks: cache.bookmarks });
+        return;
+      }
+    } catch (e) { }
+
     fetch(this.props.feed)
       .then(response => response.json())
-      .then(bookmarks => this.setState({ bookmarks }));
+      .then(bookmarks => {
+        this.setState({ bookmarks });
+        localStorage.setItem('bookmarks', JSON.stringify({
+          bookmarks,
+          expiry: new Date().getTime() + 1 * 60 * 60 * 1000
+        }));
+      });
   }
 
   render() {
@@ -18,17 +31,17 @@ export default class Bookmarks extends Component {
 
     if (bookmarks.length === 0) {
       return (
-        <img className="loading" alt="Loading..." src={this.props.loadingGif} />
+        <div className="text-muted text-center">{this.props.loadingMessage}</div>
       );
     }
 
     return bookmarks.slice(0, this.props.limit).map(bookmark => {
-      const date = timeago().format(bookmark.dt);
       return (
         <div key={bookmark.dt} className="bookmark">
-          <a href={bookmark.u} target="_blank">{bookmark.d}</a>
-          <p>{bookmark.n}</p>
-          <span className="date">{date}</span>
+          <h2>
+            <a href={bookmark.u} target="_blank">{bookmark.d}</a>
+          </h2>
+          <p className="text-muted">{bookmark.n}</p>
         </div>
       )
     });
