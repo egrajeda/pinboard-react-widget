@@ -10,15 +10,16 @@ export default class Bookmarks extends Component {
     try {
       const cache = JSON.parse(localStorage.getItem('bookmarks'));
       if (cache.expiry > new Date().getTime() && cache.bookmarks.length > 0) {
-        this.setState({ bookmarks: cache.bookmarks });
+        this.setState({bookmarks: cache.bookmarks});
         return;
       }
-    } catch (e) { }
+    } catch (e) {
+    }
 
     fetch(this.props.feed)
       .then(response => response.json())
       .then(bookmarks => {
-        this.setState({ bookmarks });
+        this.setState({bookmarks});
         localStorage.setItem('bookmarks', JSON.stringify({
           bookmarks,
           expiry: new Date().getTime() + 1 * 60 * 60 * 1000
@@ -27,7 +28,7 @@ export default class Bookmarks extends Component {
   }
 
   render() {
-    const { bookmarks } = this.state;
+    const {bookmarks} = this.state;
 
     if (bookmarks.length === 0) {
       return (
