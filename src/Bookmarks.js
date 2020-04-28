@@ -42,7 +42,7 @@ export default class Bookmarks extends Component {
           <h2>
             <a href={bookmark.u} target="_blank">{bookmark.d}</a>
           </h2>
-          <p className="text-muted">{bookmark.n}</p>
+          <p>{bookmark.n}</p>
         </div>
       )
     });
