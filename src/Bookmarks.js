@@ -32,7 +32,7 @@ export default class Bookmarks extends Component {
 
     if (bookmarks.length === 0) {
       return (
-        <div className="text-muted text-center">{this.props.loadingMessage}</div>
+        <div>{this.props.loadingMessage}</div>
       );
     }
 
